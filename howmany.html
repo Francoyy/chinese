@@ -8,20 +8,36 @@
         xmlDoc = $.parseXML(xml);
         var entries = $(xmlDoc).find("headword");
         var map = {};
+        var array = [];
+        var divResult = document.getElementById("result");
+        var contentString = "";
         for (var i = 0; i < entries.length; i++) {
             if (entries[i].getAttribute("charset") === "tc") {
                 for (var j = 0; j < entries[i].innerHTML.length; j++) {
-                    map[entries[i].innerHTML[j]] = !map[entries[i].innerHTML[j]] ? 1 : map[entries[i].innerHTML[j]] + 1;
+                    map[entries[i].innerHTML[j]] = !map[entries[i].innerHTML[j]] ? 1 : map[entries[i].innerHTML[j]] + 1; //creating a json with key=character and value=nb of occurences
                 }
             }
         }
-        console.error(map);
-        console.error(Object.keys(map).length);
+        for(var i=0; i < Object.keys(map).length; i++) {
+            array.push({"char": Object.keys(map)[i], "value": map[Object.keys(map)[i]]}); //converting into an array of json objects [{char, value}]
+        }
+        array.sort(function(a, b) {
+            return b.value - a.value;
+        });
+
+        contentString = "Individual characters: " + Object.keys(map).length; //display number of unique characters
+        contentString += "<br/>Median number:" + array[Math.floor(array.length / 2)].value;
+        for (var i = 0; i < array.length; i++) {
+            contentString += "</br>" + array[i].char + " - " + array[i].value;
+        }
+        divResult.innerHTML = contentString;
+
         
     }
 </script>
 
 <body onload="loadxml()">
+    <div id="result"></div>
 </body>
 
 </html>
