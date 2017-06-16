@@ -1,0 +1,27 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<script type="text/javascript">
+    function loadxml() {
+        var xml = ''; //paste all the xml string here
+        xmlDoc = $.parseXML(xml);
+        var entries = $(xmlDoc).find("headword");
+        var map = {};
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].getAttribute("charset") === "tc") {
+                for (var j = 0; j < entries[i].innerHTML.length; j++) {
+                    map[entries[i].innerHTML[j]] = !map[entries[i].innerHTML[j]] ? 1 : map[entries[i].innerHTML[j]] + 1;
+                }
+            }
+        }
+        console.error(map);
+        console.error(Object.keys(map).length);
+        
+    }
+</script>
+
+<body onload="loadxml()">
+</body>
+
+</html>
